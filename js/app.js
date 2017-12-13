@@ -20,7 +20,6 @@ var allFeeds = [
         url: 'http://feeds.feedburner.com/udacity-linear-digressions'
     }
 ];
-var isMenuShow = false;
 
 /* 这个函数负责启动我们的应用，Google Feed Reader API 会被异步加载
  * 然后调用这个方法。
@@ -64,6 +63,7 @@ function init() {
                  });
 
                  if (cb) {
+                     console.log('checking');
                      cb();
                  }
                },
@@ -107,7 +107,6 @@ $(function() {
      * 组织链接的默认点击行为发生。
      */
     feedList.on('click', 'a', function() {
-        isMenuShow = false;
         var item = $(this);
 
         $('body').addClass('menu-hidden');
@@ -119,8 +118,6 @@ $(function() {
      * 菜单的显示状态的切换。
      */
     menuIcon.on('click', function() {
-        isMenuShow = !isMenuShow;
-        console.log(isMenuShow);
         $('body').toggleClass('menu-hidden');
     });
 }());

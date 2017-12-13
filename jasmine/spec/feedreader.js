@@ -61,13 +61,11 @@ $(function() {
          * 测试应该包含两个 expectation ： 党点击图标的时候菜单是否显示，
          * 再次点击的时候是否隐藏。
          */
-
         it('is able to hide or display', function () {
-                if (isMenuShow) {
-                    expect($('.menu-hidden').length >= 1).toBe(false);
-                } else {
-                    expect($('.menu-hidden').length >= 1).toBe(true);
-                }
+            $('.menu-icon-link').click();
+            expect($('.menu-hidden').length >= 1).toBe(false);
+            $('.menu-icon-link').click();
+            expect($('.menu-hidden').length >= 1).toBe(true);
         });
     });
         
@@ -75,6 +73,14 @@ $(function() {
          
 
     /* TODO: 13. 写一个叫做 "Initial Entries" 的测试用例 */
+    // The solution is to check if the feed class has child node.
+    describe('Initial Entries', function () {
+
+        beforeEach(function (done) {
+           loadFeed(0, function () {
+               done();
+           });
+        });
 
         /* TODO:
          * 写一个测试保证 loadFeed 函数被调用而且工作正常，即在 .feed 容器元素
@@ -83,11 +89,39 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
+        it('should work at the beginning', function (done) {
+            console.log($('.feed').children());
+            expect($('.feed').children().length >= 1).toBe(true);
+            done();
+        })
+    });
+
 
     /* TODO: 写一个叫做 "New Feed Selection" 的测试用例 */
+     /*I use two arrays to store the initial entries and the selected entries.
+     Once both these two sets of entries were pushed into their own array,
+     I compare these two array to see if they have a different hostname.*/
+    describe('New Feed Selection', function () {
+        var initialData;
+        var newData;
+        beforeEach(function (done) {
+            loadFeed(0, function () {
+                initialData = $('.feed').children();
+                loadFeed(1, function () {
+                    newData = $('.feed').children();
+                    done();
+                });
+            });
+        });
 
         /* TODO:
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
+        it('should make the feeds different', function (done) {
+            expect(initialData[0].hostname === newData[0].hostname).toBe(false);
+            done();
+        })
+    })
+
 }());
